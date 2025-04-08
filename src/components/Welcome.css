@@ -1,0 +1,124 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  /* overflow-x: hidden; Prevent horizontal scrolling */
+}
+
+.welcome-container {
+    background-color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .navbar {
+    width: 100%;
+    background-color: #0056b3; 
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 30px;
+    align-items: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .nav-item {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+  
+  .nav-item:hover {
+    color: #ffcc00; /* Light yellow hover effect */
+  }
+  
+  .edit-button {
+    background-color: white;
+    color: #0056b3;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 15px;
+    border: 2px solid #0056b3;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .edit-button:hover {
+    background-color: #0056b3;
+    color: white;
+  }
+    
+  .welcome-content {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .welcome-content h1 {
+    color: #0056b3;
+    font-size: 36px;
+  }
+  
+  .welcome-content p {
+    font-size: 18px;
+    color: #333;
+  }
+
+
+ .welcome-container {
+  background-color: white;
+  min-height: 100vh;
+  padding: 2rem;
+  margin-top: 0;
+  padding-top: 0;
+  
+}
+
+.adjacent-box-section {
+  margin-top: 40px;
+}
+
+.division-box-row {
+  margin-bottom: 40px;
+}
+
+.division-box-row h2 {
+  color: #003399;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+.box-carousel {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.subject-box {
+  width: 100px;
+  height: 100px;
+  background-color: #003399;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+
+.subject-box:hover {
+  transform: scale(1.05);
+}
