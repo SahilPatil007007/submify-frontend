@@ -46,6 +46,15 @@ const AddCourse = () => {
       return;
     }
 
+    // Double check confirmation
+    const isConfirmed = window.confirm(
+      `Are you sure you want to add this course?\n\nSemester: ${semester}\nDivision: ${selectedDiv}\nSubject: ${selectedSub}`
+    );
+
+    if (!isConfirmed) {
+      return;
+    }
+
     try {
       setLoading(true);
       await axios.post(

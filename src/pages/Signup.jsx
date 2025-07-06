@@ -7,12 +7,49 @@ import toast from 'react-hot-toast';
 
 const Signup = () => {
   const [form, setForm] = useState({ email: '', name: '', id: '', password: '' });
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    // Clear error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: '' });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!form.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+    if (!form.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    if (!form.id.trim()) {
+      newErrors.id = 'ID is required';
+    }
+    if (!form.password.trim()) {
+      newErrors.password = 'Password is required';
+    } else if (form.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      toast.error('Please fill all required fields correctly');
+      return;
+    }
+
     try {
       await signup(form);
       toast.success('Signup successful! Please login.');
@@ -26,10 +63,36 @@ const Signup = () => {
     <div className="max-w-md mx-auto mt-10 p-6 shadow-xl bg-white rounded-xl">
       <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
       <form onSubmit={handleSubmit}>
-        <InputField label="Name" name="name" value={form.name} onChange={handleChange} />
-        <InputField label="Email" name="email" value={form.email} onChange={handleChange} type="email" />
-        <InputField label="ID" name="id" value={form.id} onChange={handleChange} />
-        <InputField label="Password" name="password" value={form.password} onChange={handleChange} type="password" />
+        <InputField 
+          label="Name" 
+          name="name" 
+          value={form.name} 
+          onChange={handleChange}
+          error={errors.name}
+        />
+        <InputField 
+          label="Email" 
+          name="email" 
+          value={form.email} 
+          onChange={handleChange} 
+          type="email"
+          error={errors.email}
+        />
+        <InputField 
+          label="ID" 
+          name="id" 
+          value={form.id} 
+          onChange={handleChange}
+          error={errors.id}
+        />
+        <InputField 
+          label="Password" 
+          name="password" 
+          value={form.password} 
+          onChange={handleChange} 
+          type="password"
+          error={errors.password}
+        />
         <button className="w-full bg-blue-600 text-white py-2 mt-4 rounded-lg hover:bg-blue-700">
           Sign Up
         </button>
