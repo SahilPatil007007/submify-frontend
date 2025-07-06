@@ -3,6 +3,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { getAuth } from '../utils/auth';
+import { 
+  SectionHeader, 
+  AdminCard, 
+  PrimaryButton, 
+  InputField 
+} from '../components/AdminUI';
 
 const AddCourse = () => {
   const navigate = useNavigate();
@@ -40,21 +46,18 @@ const AddCourse = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!selectedDiv || !selectedSub || !semester) {
       toast.error('Please fill all fields');
       return;
     }
-
-    // Double check confirmation
+  
     const isConfirmed = window.confirm(
       `Are you sure you want to add this course?\n\nSemester: ${semester}\nDivision: ${selectedDiv}\nSubject: ${selectedSub}`
     );
-
-    if (!isConfirmed) {
-      return;
-    }
-
+  
+    if (!isConfirmed) return;
+  
     try {
       setLoading(true);
       await axios.post(
@@ -65,82 +68,95 @@ const AddCourse = () => {
       toast.success('Course added successfully');
       navigate('/dashboard');
     } catch (err) {
-      toast.error('Failed to add course');
+      if (err.response && err.response.status === 409) {
+        toast.error(err.response.data || 'Subject already assigned to this division.');
+      } else {
+        toast.error('Failed to add course');
+      }
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded shadow-md w-full max-w-md space-y-4"
-      >
-        <h2 className="text-2xl font-semibold text-center">Add Course</h2>
+    <div className="p-8 max-w-7xl mx-auto bg-gray-50 min-h-screen">
+      <SectionHeader 
+        title="Add Course" 
+        subtitle="Create a new course assignment"
+        icon="📚"
+      />
+      
+      <div className="max-w-2xl mx-auto">
+        <AdminCard>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <h2 className="text-2xl font-bold text-center mb-8">Course Details</h2>
 
-        <div>
-          <label className="block font-medium mb-1">Select Semester</label>
-          <select
-            value={semester}
-            onChange={handleSemesterChange}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            required
-          >
-            <option value="">-- Select Semester --</option>
-            {[3, 4, 5, 6, 7, 8].map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-        </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Select Semester</label>
+              <select
+                value={semester}
+                onChange={handleSemesterChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+              >
+                <option value="">-- Select Semester --</option>
+                {[3, 4, 5, 6, 7, 8].map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <div>
-          <label className="block font-medium mb-1">Select Division</label>
-          <select
-            value={selectedDiv}
-            onChange={(e) => setSelectedDiv(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            required
-            disabled={!divisions.length}
-          >
-            <option value="">-- Select Division --</option>
-            {divisions.map((div) => (
-              <option key={div} value={div}>
-                {div}
-              </option>
-            ))}
-          </select>
-        </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Select Division</label>
+              <select
+                value={selectedDiv}
+                onChange={(e) => setSelectedDiv(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+                disabled={!divisions.length}
+              >
+                <option value="">-- Select Division --</option>
+                {divisions.map((div) => (
+                  <option key={div} value={div}>
+                    {div}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <div>
-          <label className="block font-medium mb-1">Select Subject</label>
-          <select
-            value={selectedSub}
-            onChange={(e) => setSelectedSub(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            required
-            disabled={!subjects.length}
-          >
-            <option value="">-- Select Subject --</option>
-            {subjects.map((sub) => (
-              <option key={sub} value={sub}>
-                {sub}
-              </option>
-            ))}
-          </select>
-        </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Select Subject</label>
+              <select
+                value={selectedSub}
+                onChange={(e) => setSelectedSub(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required
+                disabled={!subjects.length}
+              >
+                <option value="">-- Select Subject --</option>
+                {subjects.map((sub) => (
+                  <option key={sub} value={sub}>
+                    {sub}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-        >
-          {loading ? 'Saving...' : 'Save Course'}
-        </button>
-      </form>
+            <PrimaryButton
+              type="submit"
+              disabled={loading}
+              loading={loading}
+              className="w-full"
+            >
+              Save Course
+            </PrimaryButton>
+          </form>
+        </AdminCard>
+      </div>
     </div>
   );
 };

@@ -2,6 +2,17 @@ import { useState } from 'react';
 import { uploadStudentsCSV, findStudent, updateStudent } from '../api/admin';
 import toast from 'react-hot-toast';
 import Breadcrumb from '../components/Breadcrumb';
+import { 
+  SectionHeader, 
+  AdminCard, 
+  TabButton, 
+  PrimaryButton, 
+  SuccessButton, 
+  SecondaryButton, 
+  InputField, 
+  FileUpload, 
+  InfoCard 
+} from '../components/AdminUI';
 
 const AdminStudents = () => {
   const [activeTab, setActiveTab] = useState('upload');
@@ -90,180 +101,151 @@ const AdminStudents = () => {
     setEditData(prev => ({ ...prev, [field]: value }));
   };
 
-  const TabButton = ({ id, title, active }) => (
-    <button
-      onClick={() => setActiveTab(id)}
-      className={`px-4 py-2 rounded-lg font-medium transition ${
-        active ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-      }`}
-    >
-      {title}
-    </button>
-  );
+
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-8 max-w-7xl mx-auto bg-gray-50 min-h-screen">
       <Breadcrumb />
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">Student Management</h1>
-        <p className="text-gray-600">Upload, search, and update student information</p>
-      </div>
+      <SectionHeader 
+        title="Student Management" 
+        subtitle="Upload, search, and update student information"
+        icon="👥"
+      />
 
       {/* Tab Navigation */}
-      <div className="flex gap-2 mb-6">
-        <TabButton id="upload" title="Upload CSV" active={activeTab === 'upload'} />
-        <TabButton id="search" title="Search Student" active={activeTab === 'search'} />
+      <div className="flex gap-3 mb-8">
+        <TabButton 
+          id="upload" 
+          title="Upload CSV" 
+          active={activeTab === 'upload'} 
+          onClick={() => setActiveTab('upload')}
+        />
+        <TabButton 
+          id="search" 
+          title="Search Student" 
+          active={activeTab === 'search'} 
+          onClick={() => setActiveTab('search')}
+        />
       </div>
 
-      {/* Upload CSV Tab */}
+            {/* Upload CSV Tab */}
       {activeTab === 'upload' && (
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Upload Students CSV</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select CSV File
-              </label>
-              <input
-                type="file"
-                accept=".csv"
-                onChange={handleFileChange}
-                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              />
-            </div>
-            {csvFile && (
-              <p className="text-sm text-gray-600">Selected: {csvFile.name}</p>
-            )}
-            <button
+        <AdminCard>
+          <h2 className="text-2xl font-bold mb-6">Upload Students CSV</h2>
+          <div className="space-y-6">
+            <FileUpload 
+              label="Select CSV File"
+              onChange={handleFileChange}
+              selectedFile={csvFile}
+            />
+            <PrimaryButton
               onClick={handleUpload}
               disabled={isLoading || !csvFile}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              loading={isLoading}
             >
-              {isLoading ? 'Uploading...' : 'Upload Students'}
-            </button>
-                     </div>
+              Upload Students
+            </PrimaryButton>
+                    </div>
 
-           {/* CSV Format Instructions */}
-           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-             <h3 className="text-sm font-semibold text-blue-800 mb-2">CSV Format Requirements:</h3>
-             <ul className="text-sm text-blue-700 space-y-1">
-               <li>• CSV must have headers: ID, Roll No, Name, Division, Batch</li>
-               <li>• Division and Batch must exist in the system</li>
-               <li>• Example format:</li>
-               <li className="font-mono text-xs bg-white p-2 rounded">
-                 ID,Roll No,Name,Division,Batch<br/>
-                 STU001,2023001,John Doe,A,2023<br/>
-                 STU002,2023002,Jane Smith,B,2023
-               </li>
-             </ul>
-           </div>
-         </div>
-       )}
+          {/* CSV Format Instructions */}
+          <InfoCard 
+            title="CSV Format Requirements" 
+            type="info"
+          >
+            <ul className="space-y-1">
+              <li>• CSV must have headers: ID, Roll No, Name, Division, Batch</li>
+              <li>• Division and Batch must exist in the system</li>
+              <li>• Example format:</li>
+              <li className="font-mono text-xs bg-white p-2 rounded">
+                ID,Roll No,Name,Division,Batch<br/>
+                STU001,2023001,John Doe,A,2023<br/>
+                STU002,2023002,Jane Smith,B,2023
+              </li>
+            </ul>
+          </InfoCard>
+        </AdminCard>
+      )}
 
-      {/* Search Student Tab */}
+            {/* Search Student Tab */}
       {activeTab === 'search' && (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Search Form */}
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">Search Student</h2>
+          <AdminCard>
+            <h2 className="text-2xl font-bold mb-6">Search Student</h2>
             <div className="flex gap-4">
-                           <input
-               type="text"
-               placeholder="Enter Student ID (not Roll No)"
-               value={searchId}
-               onChange={(e) => setSearchId(e.target.value)}
-               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-             />
-              <button
+              <InputField
+                placeholder="Enter Student ID (not Roll No)"
+                value={searchId}
+                onChange={(e) => setSearchId(e.target.value)}
+                className="flex-1"
+              />
+              <SuccessButton
                 onClick={handleSearch}
                 disabled={isLoading}
-                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
+                loading={isLoading}
               >
-                {isLoading ? 'Searching...' : 'Search'}
-              </button>
+                Search
+              </SuccessButton>
             </div>
-          </div>
+          </AdminCard>
 
           {/* Student Details */}
           {student && (
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">Student Details</h2>
-                <button
+            <AdminCard>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Student Details</h2>
+                <PrimaryButton
                   onClick={() => setEditMode(!editMode)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                 >
                   {editMode ? 'Cancel Edit' : 'Edit'}
-                </button>
+                </PrimaryButton>
               </div>
 
               {editMode ? (
-                <div className="space-y-4">
-                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-1">Student ID</label>
-                       <input
-                         type="text"
-                         value={editData.studentId || ''}
-                         onChange={(e) => handleInputChange('studentId', e.target.value)}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-1">Roll No</label>
-                       <input
-                         type="text"
-                         value={editData.rollNo || ''}
-                         onChange={(e) => handleInputChange('rollNo', e.target.value)}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                       <input
-                         type="text"
-                         value={editData.name || ''}
-                         onChange={(e) => handleInputChange('name', e.target.value)}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-1">Division</label>
-                       <input
-                         type="text"
-                         value={editData.division?.division || ''}
-                         onChange={(e) => handleInputChange('division', e.target.value)}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                       />
-                     </div>
-                     <div>
-                       <label className="block text-sm font-medium text-gray-700 mb-1">Batch</label>
-                       <input
-                         type="text"
-                         value={editData.batchName?.batchName || ''}
-                         onChange={(e) => handleInputChange('batchName', e.target.value)}
-                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                       />
-                     </div>
-                   </div>
-                  <div className="flex gap-2">
-                    <button
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <InputField
+                      label="Student ID"
+                      value={editData.studentId || ''}
+                      onChange={(e) => handleInputChange('studentId', e.target.value)}
+                    />
+                    <InputField
+                      label="Roll No"
+                      value={editData.rollNo || ''}
+                      onChange={(e) => handleInputChange('rollNo', e.target.value)}
+                    />
+                    <InputField
+                      label="Name"
+                      value={editData.name || ''}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                    />
+                    <InputField
+                      label="Division"
+                      value={editData.division?.division || ''}
+                      onChange={(e) => handleInputChange('division', e.target.value)}
+                    />
+                    <InputField
+                      label="Batch"
+                      value={editData.batchName?.batchName || ''}
+                      onChange={(e) => handleInputChange('batchName', e.target.value)}
+                    />
+                  </div>
+                  <div className="flex gap-3">
+                    <SuccessButton
                       onClick={handleUpdate}
                       disabled={isLoading}
-                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
+                      loading={isLoading}
                     >
-                      {isLoading ? 'Updating...' : 'Update Student'}
-                    </button>
-                    <button
+                      Update Student
+                    </SuccessButton>
+                    <SecondaryButton
                       onClick={() => {
                         setEditMode(false);
                         setEditData(student);
                       }}
-                      className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
                     >
                       Cancel
-                    </button>
+                    </SecondaryButton>
                   </div>
                 </div>
                              ) : (
@@ -290,7 +272,7 @@ const AdminStudents = () => {
                    </div>
                  </div>
                )}
-            </div>
+            </AdminCard>
           )}
         </div>
       )}

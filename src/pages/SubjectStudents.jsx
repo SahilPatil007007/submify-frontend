@@ -2,6 +2,12 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { 
+  SectionHeader, 
+  AdminCard, 
+  SuccessButton, 
+  InputField 
+} from '../components/AdminUI';
 
 const SubjectStudents = () => {
   const { search } = useLocation();
@@ -56,46 +62,78 @@ const SubjectStudents = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto mt-10 p-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6">Student Submissions</h2>
-      <table className="min-w-full border">
-        <thead>
-          <tr className="bg-gray-200 text-left">
-            <th className="p-2 border">Roll No</th>
-            <th className="p-2 border">Name</th>
-            <th className="p-2 border">UT1</th>
-            <th className="p-2 border">UT2</th>
-            <th className="p-2 border">Remark</th>
-            <th className="p-2 border">Status</th>
-            <th className="p-2 border">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map((stu, index) => (
-            <tr key={stu.rollNo} className="border">
-              <td className="p-2 border">{stu.rollNo}</td>
-              <td className="p-2 border">{stu.name}</td>
-              <td className="p-2 border">
-                <input type="number" value={stu.ut1} onChange={(e) => handleChange(index, 'ut1', e.target.value)} className="border px-2 py-1 w-16" />
-              </td>
-              <td className="p-2 border">
-                <input type="number" value={stu.ut2} onChange={(e) => handleChange(index, 'ut2', e.target.value)} className="border px-2 py-1 w-16" />
-              </td>
-              <td className="p-2 border">
-                <input type="text" value={stu.remark} onChange={(e) => handleChange(index, 'remark', e.target.value)} className="border px-2 py-1 w-32" />
-              </td>
-              <td className="p-2 border text-center">
-                <input type="checkbox" checked={stu.status} onChange={(e) => handleChange(index, 'status', e)} />
-              </td>
-              <td className="p-2 border">
-                <button onClick={() => handleSave(stu)} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
-                  Save
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="p-8 max-w-7xl mx-auto bg-gray-50 min-h-screen">
+      <SectionHeader 
+        title="Student Submissions" 
+        subtitle={`Subject: ${subjectId} | Division: ${divisionId}`}
+        icon="👥"
+      />
+
+      <AdminCard>
+        <div className="overflow-x-auto">
+          <table className="min-w-full">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Roll No</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Name</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">UT1</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">UT2</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Remark</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Status</th>
+                <th className="text-left py-4 px-6 font-semibold text-gray-700">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {students.map((stu, index) => (
+                <tr key={stu.rollNo} className="border-b border-gray-100 hover:bg-gray-50">
+                  <td className="py-4 px-6 font-medium text-gray-900">{stu.rollNo}</td>
+                  <td className="py-4 px-6 text-gray-700">{stu.name}</td>
+                  <td className="py-4 px-6">
+                    <input 
+                      type="number" 
+                      value={stu.ut1} 
+                      onChange={(e) => handleChange(index, 'ut1', e.target.value)} 
+                      className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    />
+                  </td>
+                  <td className="py-4 px-6">
+                    <input 
+                      type="number" 
+                      value={stu.ut2} 
+                      onChange={(e) => handleChange(index, 'ut2', e.target.value)} 
+                      className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    />
+                  </td>
+                  <td className="py-4 px-6">
+                    <input 
+                      type="text" 
+                      value={stu.remark} 
+                      onChange={(e) => handleChange(index, 'remark', e.target.value)} 
+                      className="w-32 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                    />
+                  </td>
+                  <td className="py-4 px-6">
+                    <input 
+                      type="checkbox" 
+                      checked={stu.status} 
+                      onChange={(e) => handleChange(index, 'status', e)} 
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                  </td>
+                  <td className="py-4 px-6">
+                    <SuccessButton 
+                      onClick={() => handleSave(stu)}
+                      size="sm"
+                    >
+                      Save
+                    </SuccessButton>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </AdminCard>
     </div>
   );
 };

@@ -5,6 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import InputField from '../components/InputField';
 import { useAuthContext } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { 
+  SectionHeader, 
+  AdminCard, 
+  PrimaryButton 
+} from '../components/AdminUI';
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -28,24 +33,49 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 shadow-xl bg-white rounded-xl">
-      <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-      <form onSubmit={handleSubmit}>
-        <InputField label="Email" name="email" value={form.email} onChange={handleChange} type="email" />
-        <InputField label="Password" name="password" value={form.password} onChange={handleChange} type="password" />
-        <button className="w-full bg-green-600 text-white py-2 mt-4 rounded-lg hover:bg-green-700">
-          Login
-        </button>
-      </form>
-      <p className="mt-4 text-sm text-center text-gray-600">
-          Don’t have an account?{' '}
-          <span
-            onClick={() => navigate('/signup')}
-            className="text-blue-600 hover:underline cursor-pointer"
-          >
-            Register here
-          </span>
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <SectionHeader 
+          title="Welcome Back" 
+          subtitle="Sign in to your account"
+          icon="🔐"
+          className="text-center mb-8"
+        />
+        
+        <AdminCard>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <InputField 
+              label="Email" 
+              name="email" 
+              value={form.email} 
+              onChange={handleChange} 
+              type="email" 
+            />
+            <InputField 
+              label="Password" 
+              name="password" 
+              value={form.password} 
+              onChange={handleChange} 
+              type="password" 
+            />
+            <PrimaryButton type="submit" className="w-full">
+              Sign In
+            </PrimaryButton>
+          </form>
+          
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <p className="text-sm text-center text-gray-600">
+              Don't have an account?{' '}
+              <span
+                onClick={() => navigate('/signup')}
+                className="text-blue-600 hover:underline cursor-pointer font-medium"
+              >
+                Register here
+              </span>
+            </p>
+          </div>
+        </AdminCard>
+      </div>
     </div>
   );
 };

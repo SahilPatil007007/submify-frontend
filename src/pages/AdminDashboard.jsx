@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { getAuth } from '../utils/auth';
 import Breadcrumb from '../components/Breadcrumb';
+import { SectionHeader, AdminCard, StatsCard } from '../components/AdminUI';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -40,50 +41,61 @@ const AdminDashboard = () => {
   const Card = ({ title, subtitle, icon, path, color }) => (
     <div
       onClick={() => navigate(path)}
-      className={`p-6 rounded-xl shadow-md hover:shadow-lg cursor-pointer transition-all transform hover:scale-105 ${color} text-white`}
+      className={`p-8 rounded-xl shadow-lg hover:shadow-xl cursor-pointer transition-all duration-300 transform hover:scale-105 border border-gray-100 ${color} text-white relative overflow-hidden`}
     >
-      <div className="text-4xl mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-sm opacity-90">{subtitle}</p>
+      <div className="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -translate-y-16 translate-x-16"></div>
+      <div className="relative z-10">
+        <div className="text-5xl mb-6">{icon}</div>
+        <h3 className="text-2xl font-bold mb-3">{title}</h3>
+        <p className="text-sm opacity-90 leading-relaxed">{subtitle}</p>
+      </div>
     </div>
   );
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-8 max-w-7xl mx-auto bg-gray-50 min-h-screen">
       <Breadcrumb />
-      {/* Header Section */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
-        <p className="text-gray-600">Welcome back, {user.name}. Manage your system from here.</p>
-      </div>
+      <SectionHeader 
+        title="Admin Dashboard" 
+        subtitle={`Welcome back, ${user.name}. Manage your system from here.`}
+        icon="⚙️"
+      />
 
       {/* Admin Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-8 mb-12">
         {adminCards.map((card, index) => (
           <Card key={index} {...card} />
         ))}
       </div>
 
       {/* Quick Stats Section */}
-      <div className="mt-12">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Quick Overview</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="text-2xl font-bold text-blue-600">Students</div>
-            <div className="text-sm text-gray-600">Manage student data</div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="text-2xl font-bold text-green-600">Teachers</div>
-            <div className="text-sm text-gray-600">Manage teacher data</div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="text-2xl font-bold text-orange-600">Data</div>
-            <div className="text-sm text-gray-600">Manage system data</div>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="text-2xl font-bold text-purple-600">Emails</div>
-            <div className="text-sm text-gray-600">Manage allowed emails</div>
-          </div>
+      <div>
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">System Overview</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatsCard 
+            title="Students" 
+            value="Manage" 
+            icon="👥" 
+            color="blue" 
+          />
+          <StatsCard 
+            title="Teachers" 
+            value="Manage" 
+            icon="👨‍🏫" 
+            color="green" 
+          />
+          <StatsCard 
+            title="Data" 
+            value="Manage" 
+            icon="📊" 
+            color="orange" 
+          />
+          <StatsCard 
+            title="Emails" 
+            value="Manage" 
+            icon="📧" 
+            color="purple" 
+          />
         </div>
       </div>
     </div>
