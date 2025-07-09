@@ -21,7 +21,7 @@ const SubjectStudents = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/api/teacher/students/submissions`, {
+        const res = await axios.get(`https://submify-backend.onrender.com/api/teacher/students/submissions`, {
           params: { subjectId, divisionId },
           headers: {
             Authorization: `Bearer ${token}`
@@ -43,7 +43,7 @@ const SubjectStudents = () => {
 
   const handleSave = async (student) => {
     try {
-      await axios.put(`http://localhost:8080/api/teacher/students/update-student`, {
+      await axios.put(`https://submify-backend.onrender.com/api/teacher/students/update-student`, {
         studentId: student.rollNo,
         subjectId: parseInt(subjectId),
         ut1: parseInt(student.ut1),

@@ -19,7 +19,7 @@ const CoordinatorDashboard = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8080/api/teacher/students/pivot-submission",
+          "https://submify-backend.onrender.com/api/teacher/students/pivot-submission",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -66,7 +66,7 @@ const CoordinatorDashboard = () => {
     const student = pivotData.find((s) => s.rollNo === rollNo);
     try {
       await axios.put(
-        `http://localhost:8080/api/teacher/students/${rollNo}/finalize`,
+        `https://submify-backend.onrender.com/api/teacher/students/${rollNo}/finalize`,
         { finalized: student.finalized },
         {
           headers: {

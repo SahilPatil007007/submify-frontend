@@ -35,8 +35,8 @@ const AddCourse = () => {
     else if ([7, 8].includes(sem)) setDivisions(['BE1', 'BE2', 'BE3', 'BE4']);
     else setDivisions([]);
     try {
-        console.log("http://localhost:8080/api/teacher/form/subs "+ sem + " " + token);
-      const res = await axios.post("http://localhost:8080/api/teacher/form/subs",{ sem },{headers:{Authorization: `Bearer ${token}`}});
+        console.log("https://submify-backend.onrender.com/api/teacher/form/subs "+ sem + " " + token);
+      const res = await axios.post("https://submify-backend.onrender.com/api/teacher/form/subs",{ sem },{headers:{Authorization: `Bearer ${token}`}});
       setSubjects(res.data);
     } catch (err) {
       toast.error('Failed to fetch subjects');
@@ -61,7 +61,7 @@ const AddCourse = () => {
     try {
       setLoading(true);
       await axios.post(
-        'http://localhost:8080/api/teacher/form',
+        'https://submify-backend.onrender.com/api/teacher/form',
         { sub: selectedSub, div: selectedDiv },
         { headers: { Authorization: `Bearer ${token}` } }
       );
