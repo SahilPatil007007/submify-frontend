@@ -21,7 +21,6 @@ const AddCourse = () => {
   const [loading, setLoading] = useState(false);
 
   const token = getAuth().token;
-  console.log("Addcourese => "+token);
   
   const handleSemesterChange = async (e) => {
     const sem = parseInt(e.target.value);
